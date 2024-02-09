@@ -1,6 +1,8 @@
 order = 5
 framelen = 7
-[vander_obj, frame_half_len] = savgolay(order, framelen)
+
+[frame_half_len, vander_obj] = sgolay(order, framelen)
+
 display(vander_obj)
 display(frame_half_len)
 s = fliplr(vander(0.5*(1-framelen):0.5*(framelen-1)));
@@ -12,7 +14,7 @@ display(S)
 S = s(:,1:order)
 display(S)
 
-function [vander_obj, frame_half_len] = savgolay(order, framelen)
+function [frame_half_len, vander_obj] = sgolay(order, framelen)
 % designs a Savitzky-Golay Finite Impulse Response (FIR) smothing filter with polynomial order order and frame lenght framelen.
 % INPUTS:
 % order -- polynomial order positive odd integer
@@ -44,9 +46,21 @@ if mod(order,1) ~= 0
     warning("order was rounded to the nearest integer.");
 end
 
-% Getting frame half lenght
-frame_half_len = (framelen - 1) / 2;
-% Creating Vandermonde Matrix
-vander_obj = fliplr(vander(-frame_half_len:frame_half_len));
-frame_half_len;
+% Getting vander
+fliptype = 'fliplr'
+[frame_half_len, vander_obj] = GetVander(framelen, fliptype);
+end
+
+function [frame_half_len, vander_obj] = GetVander(framelen, fliptype)
+    arguments
+        framelen (1,1) double {mustBeNumeric, mustBeReal, mustBePositive, mustBeGreaterThan(framelen,0)}
+        fliptype (1,:) char {mustBeMember(fliptype,{'none','fliplr'})} = 'none'
+    end
+    frame_half_len = (framelen - 1) / 2;
+    if strcmp(fliptype,'fliplr')
+        vander_obj = fliplr(vander(-frame_half_len:frame_half_len));
+    else
+        vander_obj = vander(-frame_half_len:frame_half_len);
+    end
+    
 end
