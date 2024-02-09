@@ -55,7 +55,9 @@ display(order)
 display(framelen);
 disp("size(vander_obj):");
 display(size(vander_obj));
+%VanderMatrix = vander_obj(:,1:order+1);
 VanderMatrix = vander_obj(:,framelen:-1:framelen-order);
+display(VanderMatrix)
 disp("size(VanderMatrix):");
 display(size(VanderMatrix))
 
@@ -63,17 +65,18 @@ display(size(VanderMatrix))
 [~,R] = qr(VanderMatrix,0);
 disp("R:");
 display(size(R));
-FIRFiltersCoeff = (R'*R)\VanderMatrix';
+MatrixOfDiffFilter = (R'*R)\VanderMatrix';%VanderMatrix/R'/R; %(R'*R)\VanderMatrix';
 %FIRFiltersCoeff = R'\R\VanderMatrix'; % R^(-T)R^(-1)H^(T)
                                     % OTHER = vander_obj\R\R';
                                     % display(OTHER):
                                     %FIRFiltersCoeff = VanderMatrix\R\R';
-disp("FIRFiltersCoeff:");
-display(size(FIRFiltersCoeff));
-MatrixOfDiffFilter = VanderMatrix * FIRFiltersCoeff;
-%MatrixOfDiffFilter = FIRFiltersCoeff * VanderMatrix;
+MatrixOfDiffFilter = VanderMatrix/R/R';
 disp("MatrixOfDiffFilter:");
 display(size(MatrixOfDiffFilter))
+%FIRFiltersCoeff = VanderMatrix * MatrixOfDiffFilter;
+FIRFiltersCoeff = MatrixOfDiffFilter * VanderMatrix';
+disp("FIRFiltersCoeff:");
+display(size(FIRFiltersCoeff));
 end
 
 function [frame_half_len, vander_obj] = GetVander(framelen, fliptype)

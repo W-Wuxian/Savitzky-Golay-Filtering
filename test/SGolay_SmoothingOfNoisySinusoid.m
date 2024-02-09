@@ -15,12 +15,11 @@ order    = 4;
 framelen = 21;
 
 [FIRFiltersCoeff, MatrixOfDiffFilter] =  SavitzkyGolayFIR(order, framelen); %sgolay(order, framelen);
-
 % Compute the steady-state portion of the signal by convolving it with the center row of b.
-ycenter = conv(x,MatrixOfDiffFilter((framelen+1)/2,:),'valid');
+ycenter = conv(x,FIRFiltersCoeff((framelen+1)/2,:),'valid');
 %Compute the transients. Use the last rows of b for the startup and the first rows of b for the terminal.
-ybegin = MatrixOfDiffFilter(end:-1:(framelen+3)/2,:) * x(framelen:-1:1);
-yend = MatrixOfDiffFilter((framelen-1)/2:-1:1,:) * x(end:-1:end-(framelen-1));
+ybegin = FIRFiltersCoeff(end:-1:(framelen+3)/2,:) * x(framelen:-1:1);
+yend = FIRFiltersCoeff((framelen-1)/2:-1:1,:) * x(end:-1:end-(framelen-1));
 %Concatenate the transients and the steady-state portion to generate the complete smoothed signal. Plot the original signal and the Savitzky-Golay estimate.
 y = [ybegin; ycenter; yend];
 plot([x y])
