@@ -2,15 +2,16 @@
 dt    = 0.25;
 t     = (0:dt:20-1)';
 freq  = 0.2;          % frequency
-omega = 2.0*pi*freq;    % pulsation i.e angular frequency, omega*t angle in radians.
+omega = 2.0*pi*freq;  % pulsation i.e angular frequency, omega*t angle in radians.
 Amp   = 5.0;          % Amplitude
 x     = Amp*sin(omega*t)+0.5*randn(size(t));
-
+disp("size(x)");
+display(size(x));
 % Estimate the first three derivatives of the sinusoid using the Savitzky-Golay method. Use 25-sample frames and fifth order polynomials. Divide the columns by powers of dt to scale the derivatives correctly.
 order    = 5
 framelen = 25;
-[FIRFiltersCoeff, MatrixOfDiffFilter] =  SavitzkyGolayFIR(order, framelen);
-
+[FIRFiltersCoeff, MatrixOfDiffFilter, frame_half_len] =  SavitzkyGolayFIR(order, framelen);
+display(frame_half_len);
 dx = zeros(length(x),4);
 for p = 0:3
     display("p")

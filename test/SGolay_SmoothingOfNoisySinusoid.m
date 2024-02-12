@@ -8,19 +8,27 @@ freq  = 0.2;             % frequency Hz
 omega = 2.0*pi*freq;     % angular frequency (pulsation) rad/s
 Amp   = 5.0;             % amplitude
 x     = Amp*sin(omega*t) + randn(size(t));
-
+disp("size(x)");
+display(size(x))
 % Use sgolay to smooth the signal. Use 21-sample frames and fourth order polynomials.
 
 order    = 4;
 framelen = 21;
 
-[FIRFiltersCoeff, MatrixOfDiffFilter] =  SavitzkyGolayFIR(order, framelen); %sgolay(order, framelen);
+[FIRFiltersCoeff, MatrixOfDiffFilter, frame_half_len] =  SavitzkyGolayFIR(order, framelen); %sgolay(order, framelen);
+display(frame_half_len);
 % Compute the steady-state portion of the signal by convolving it with the center row of b.
-ycenter = conv(x,FIRFiltersCoeff((framelen+1)/2,:),'valid');
+ycenter = conv(x,FIRFiltersCoeff(frame_half_len+1,:),'valid');
+%ycenter = conv(x,FIRFiltersCoeff((framelen+1)/2,:),'valid');
 %Compute the transients. Use the last rows of b for the startup and the first rows of b for the terminal.
-ybegin = FIRFiltersCoeff(end:-1:(framelen+3)/2,:) * x(framelen:-1:1);
-yend = FIRFiltersCoeff((framelen-1)/2:-1:1,:) * x(end:-1:end-(framelen-1));
+ybegin = FIRFiltersCoeff(end:-1:frame_half_len+2,:) * x(framelen:-1:1);
+yend   = FIRFiltersCoeff(frame_half_len:-1:1,:) * x(end:-1:end-(framelen-1));
+%ybegin = FIRFiltersCoeff(end:-1:(framelen+3)/2,:) * x(framelen:-1:1);
+%yend = FIRFiltersCoeff((framelen-1)/2:-1:1,:) * x(end:-1:end-(framelen-1));
+
 %Concatenate the transients and the steady-state portion to generate the complete smoothed signal. Plot the original signal and the Savitzky-Golay estimate.
 y = [ybegin; ycenter; yend];
+disp("size(y)");
+display(size(y));
 plot([x y])
 legend('Noisy Sinusoid','S-G smoothed sinusoid')
