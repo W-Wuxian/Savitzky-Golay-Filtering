@@ -14,6 +14,9 @@ data_size = size(data);
 nrows = data_size(1,1);
 ncols = data_size(1,2);
 
+path="~/Bureau/GitHub_repo/Savitzky-Golay-Filtering/data/output/signal_zlens"
+
+def = figure;
 for i = 1:ncols
     subplot(3,6,i);
     x = data(:, i);
@@ -27,13 +30,16 @@ for i = 1:ncols
     txt = strcat('filtered signal', txt);
     txt = strcat('default ', txt);
     title(txt);
-    le = [le, txt];
+    %le = [le, txt];
     %legend('signal', txt);
     %hold("on");
     grid;
 end
+saveas(def, strcat(path,"/default"), "pdf");
+savefig(def, strcat(path,"/default"));
 hold off;
-figure;
+
+classic = figure;
 for i = 1:ncols
     subplot(3,6,i);
     x = data(:, i);
@@ -47,13 +53,16 @@ for i = 1:ncols
     txt = strcat('filtered signal', txt);
     txt = strcat('classic', txt);
     title(txt);
-    le = [le, txt];
+    %le = [le, txt];
     %legend('signal', txt);
     %hold("on");
     grid;
 end
+saveas(classic, strcat(path,"/classic"), "pdf");
+savefig(classic, strcat(path,"/classic"));
 hold off;
-figure;
+
+near = figure;
 for i = 1:ncols
     subplot(3,6,i);
     x = data(:, i);
@@ -67,13 +76,16 @@ for i = 1:ncols
     txt = strcat('filtered signal', txt);
     txt = strcat('nearest-trst', txt);
     title(txt);
-    le = [le, txt];
+    %le = [le, txt];
     %legend('signal', txt);
     %hold("on");
     grid;
 end
+saveas(near, strcat(path,"/nearest"), "pdf");
+savefig(near, strcat(path,"/nearest"));
 hold off;
-figure;
+
+near2 = figure;
 for i = 1:ncols
     subplot(3,6,i);
     x = data(:, i);
@@ -87,8 +99,10 @@ for i = 1:ncols
     txt = strcat('filtered signal', txt);
     txt = strcat('nearest-notrst', txt);
     title(txt);
-    le = [le, txt];
+    %le = [le, txt];
     %legend('signal', txt);
     %hold("on");
     grid;
 end
+saveas(near2, strcat(path,"/nearest-no-trst"), "pdf");
+savefig(near2, strcat(path,"/nearest-no-trst"));
