@@ -22,7 +22,6 @@ for i = 1:ncols
     x = data(:, i);
     x_max = max(x);
     y = sgolayfilt(x/x_max, polynomial_order, framelen);
-    %figure;
     plot(x/x_max,'b');
     hold("on");
     plot(y,'r');
@@ -30,9 +29,6 @@ for i = 1:ncols
     txt = strcat('filtered signal', txt);
     txt = strcat('default ', txt);
     title(txt);
-    %le = [le, txt];
-    %legend('signal', txt);
-    %hold("on");
     grid;
 end
 saveas(def, strcat(path,"/default"), "pdf");
@@ -45,17 +41,12 @@ for i = 1:ncols
     x = data(:, i);
     x_max = max(x);
     y = sgolayfilt(x/x_max, polynomial_order, framelen, "classic");
-    %figure;
     plot(x/x_max,'b');
     hold("on");
     plot(y,'r');
     txt = sprintf('curve %i',i);
     txt = strcat('filtered signal', txt);
     txt = strcat('classic', txt);
-    title(txt);
-    %le = [le, txt];
-    %legend('signal', txt);
-    %hold("on");
     grid;
 end
 saveas(classic, strcat(path,"/classic"), "pdf");
@@ -68,7 +59,6 @@ for i = 1:ncols
     x = data(:, i);
     x_max = max(x);
     y = sgolayfilt(x/x_max, polynomial_order, framelen, "nearest");
-    %figure;
     plot(x/x_max,'b');
     hold("on");
     plot(y,'r');
@@ -76,9 +66,6 @@ for i = 1:ncols
     txt = strcat('filtered signal', txt);
     txt = strcat('nearest-trst', txt);
     title(txt);
-    %le = [le, txt];
-    %legend('signal', txt);
-    %hold("on");
     grid;
 end
 saveas(near, strcat(path,"/nearest"), "pdf");
@@ -91,7 +78,6 @@ for i = 1:ncols
     x = data(:, i);
     x_max = max(x);
     y = sgolayfilt(x/x_max, polynomial_order, framelen, "nearest","no");
-    %figure;
     plot(x/x_max,'b');
     hold("on");
     plot(y,'r');
@@ -99,9 +85,6 @@ for i = 1:ncols
     txt = strcat('filtered signal', txt);
     txt = strcat('nearest-notrst', txt);
     title(txt);
-    %le = [le, txt];
-    %legend('signal', txt);
-    %hold("on");
     grid;
 end
 saveas(near2, strcat(path,"/nearest-no-trst"), "pdf");

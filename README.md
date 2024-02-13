@@ -1,5 +1,11 @@
 # Savitzky-Golay-Filtering
-A Savitzky–Golay filter is a digital filter that can be applied to a set of digital data points for the purpose of smoothing the data, that is, to increase the precision of the data without distorting the signal tendency. (cf wikipedia)
+A Savitzky–Golay filter is a digital filter that can be applied to a set of digital data points for the purpose of smoothing the data, that is, to increase the precision of the data without distorting the signal tendency.
+Reference implementation used:
+- [wikipedia](https://fr.wikipedia.org/wiki/Algorithme_de_Savitzky-Golay)
+- [matlab](https://www.mathworks.com/help/signal/ref/sgolay.html)
+- [horcher](https://github.com/horchler/sgolayfilt/blob/master/sgolayfilt.m)
+- [burelant](https://github.com/burelant/sgolay_robust/blob/main/sgolay_robust.m)
+- [SciPy](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.savgol_filter.html)
 
 # Usage
 We defined two public functions, respectively at src/SavitzkyGolayFIR.m and src/sgolayfilt.m.

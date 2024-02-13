@@ -18,7 +18,7 @@ for i = 1:6
     plot(smoothed_data,'-+');
 end
 %plot(smoothed_data,'.-');
-[FIRFiltersCoeff, MatrixOfDiffFilter, frame_half_len] =  SavitzkyGolayFIR(order, framelen); %sgolay(order, framelen);
+[FIRFiltersCoeff, MatrixOfDiffFilter, frame_half_len] =  SavitzkyGolayFIR(order, framelen);
 % Compute the steady-state portion of the signal by convolving it with the center row of b.
 ycenter = conv(x,FIRFiltersCoeff(frame_half_len,:),'same');
 

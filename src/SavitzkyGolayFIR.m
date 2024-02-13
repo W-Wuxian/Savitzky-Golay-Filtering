@@ -35,19 +35,16 @@ end
 %fliptype = 'fliplr';
 fliptype = 'none';
 [frame_half_len, vander_obj] = GetVander( framelen, fliptype);
-%VanderMatrix = vander_obj(:,1:order+1);
+
 VanderMatrix = vander_obj( :,framelen:-1:framelen - order);
 
 % Compute (B)FIRFiltersCoeff  and (G)MatrixOfDiffFilter
 [~,R] = qr( VanderMatrix,0);
 
-MatrixOfDiffFilter = (R'*R)\VanderMatrix';%VanderMatrix/R'/R; %(R'*R)\VanderMatrix';
-%FIRFiltersCoeff = R'\R\VanderMatrix'; % R^(-T)R^(-1)H^(T)
-                                    % OTHER = vander_obj\R\R';
-                                    % display(OTHER):
-                                    %FIRFiltersCoeff = VanderMatrix\R\R';
+MatrixOfDiffFilter = (R'*R)\VanderMatrix';
+
 MatrixOfDiffFilter = VanderMatrix/R/R';
-%FIRFiltersCoeff = VanderMatrix * MatrixOfDiffFilter;
+
 FIRFiltersCoeff = MatrixOfDiffFilter * VanderMatrix';
 end
 

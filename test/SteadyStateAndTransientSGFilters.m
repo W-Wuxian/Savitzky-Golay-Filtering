@@ -10,7 +10,7 @@ order    = 3;
 framelen = 11;
 frame_half_len = (framelen - 1) / 2;
 
-[FIRFiltersCoeff, MatrixOfDiffFilter, frame_half_len] =  SavitzkyGolayFIR(order, framelen); %sgolay(order, framelen);
+[FIRFiltersCoeff, MatrixOfDiffFilter, frame_half_len] =  SavitzkyGolayFIR(order, framelen);
 % Compute the steady-state portion of the signal by convolving it with the center row of b.
 ycenter = conv(x,FIRFiltersCoeff(frame_half_len,:),'same');
 %ycenter = conv(x,FIRFiltersCoeff((framelen+1)/2,:),'same');

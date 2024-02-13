@@ -9,7 +9,7 @@ derivative_order = 1;
 % Reading from a file the input signal to be filtered
 x = fscanf(fileID,formatSpec, sizex);
 x_max = max(x);
-display(size(x));
+
 % Filtering Normalized (Norm 1) input signal using SavitzkyGolay Method
 y = sgolayfilt(x/x_max, polynomial_order, framelen,'classic');
 % Ploting Normalized input signal
