@@ -8,8 +8,9 @@ function smoothed_data = sgolayfilt(input_data, order, framelen, mode, trst, cva
 %      -- 'nearest'  The extension contains the nearest input value.
 %      -- 'constant' The extension contains the value given by the cval argument.
 %      -- 'wrap'     The extension contains the values from the other end of the array.
-%      -- 'default'  use of transient
-% trst -- transient "yes" or "no" wether to use transient reconstruction for edges at begin and end. default "yes".
+%      -- 'classic'  Use transient for edges, steady at frame_half_len
+%      -- 'default'  Use of transient for edges, steady at frame_half_len+1
+% trst -- transient "yes" or "no" wether to use transient reconstruction for edges at begin and end for mode != classic and default. default "yes".
 % cval Value to fill past the edges of the input if mode is ‘constant’. Default is 0.0.
 % OUTPUTS:
 % smoothed_data -- filtered data
@@ -17,15 +18,23 @@ function smoothed_data = sgolayfilt(input_data, order, framelen, mode, trst, cva
         input_data {mustBeNumeric, mustBeReal}
         order    (1,1) double {mustBeNumeric, mustBeReal, mustBePositive, mustBeGreaterThanOrEqual(order,0)}
         framelen (1,1) double {mustBeNumeric, mustBeReal, mustBePositive, mustBeGreaterThan(framelen,order)}
-        mode     (1,:) char   {mustBeMember(mode,{'mirror','constant','nearest','wrap','default'})} = 'default'
+        mode     (1,:) char   {mustBeMember(mode,{'mirror','constant','nearest','wrap','classic','default'})} = 'default'
         trst     (1,:) char   {mustBeMember(trst,{'yes','no'})} = 'yes'
         cval     (1,1) double {mustBeNumeric, mustBeReal} = 0.
     end
     
     [FIRFiltersCoeff, MatrixOfDiffFilter, frame_half_len] = SavitzkyGolayFIR( order, framelen);
-    padded_data = input_data;
+    if length(size(input_data)>1)
+        if size(input_data,1)<size(input_data,2)
+            padded_data = input_data';
+        else
+            padded_data = input_data;
+        end
+    else
+        padded_data = input_data;
+    end
     begin = 1;
-    if ~strcmp(mode, 'default') %if mode!='default'
+    if ~strcmp(mode, 'default') & ~strcmp(mode, 'classic') %if mode!='default'
         switch mode
           case 'mirror'
             nb = input_data( begin + 1);
@@ -69,7 +78,11 @@ function smoothed_data = sgolayfilt(input_data, order, framelen, mode, trst, cva
             smoothed_data( end - frame_half_len +1:end) = yend;
         end
     else
-        steady = conv( padded_data, FIRFiltersCoeff( frame_half_len+1, :), 'same');
+        a = 0;
+        if strcmp(mode, 'default')
+            a = 1;
+        end
+        steady = conv( padded_data, FIRFiltersCoeff( frame_half_len+a, :), 'same');
         ybeg = FIRFiltersCoeff( begin:frame_half_len,:) * padded_data( begin:framelen);
         yend = FIRFiltersCoeff( framelen - frame_half_len + 1:framelen, :) * padded_data(end - framelen + 1: end);
         smoothed_data = steady;

@@ -1,5 +1,5 @@
 % Generate a random signal and smooth it using sgolay. Specify a polynomial order of 3 and a frame length of 11. Plot the original and smoothed signals.
-rng(1)
+%rng(1)
 lx = 34;           % lenght
 x  = randn(lx, 1); % signal
 
@@ -9,12 +9,11 @@ order    = 3;
 framelen = 11;
 frame_half_len = (framelen - 1) / 2;
 
-modes = ["mirror" "constant" "nearest" "wrap" "default"]
-%smoothed_data = sgolayfilt(x, order, framelen, 'constant');
+modes = ["mirror" "constant" "nearest" "wrap" "classic" "default"]
 
-plot(x,':');;
+plot(x,':');
 hold on
-for i = 1:5
+for i = 1:6
     smoothed_data = sgolayfilt(x, order, framelen, modes(i),'yes');
     plot(smoothed_data,'-+');
 end
@@ -22,8 +21,6 @@ end
 [FIRFiltersCoeff, MatrixOfDiffFilter, frame_half_len] =  SavitzkyGolayFIR(order, framelen); %sgolay(order, framelen);
 % Compute the steady-state portion of the signal by convolving it with the center row of b.
 ycenter = conv(x,FIRFiltersCoeff(frame_half_len,:),'same');
-%ycenter = conv(x,FIRFiltersCoeff((framelen+1)/2,:),'same');
-
 
 plot(ycenter)
 
@@ -38,8 +35,6 @@ cmplt                         = ycenter;
 cmplt(1:frame_half_len)       = ybeg;
 cmplt(lx-frame_half_len+1:lx) = yend;
 
-plot(cmplt,'.-')
-%legend('Signal','smoothed','Steady','complete')
-legend('Signal',"mirror","constant","nearest","wrap","def",'Steady','complete')
-%legend('Signal',"wrap","default",'Steady')
+plot(cmplt,'.-');
+legend('Signal',"mirror","constant","nearest","wrap","classic","def",'Steady','complete');
 
