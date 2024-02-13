@@ -74,6 +74,7 @@ The next two tests are based on our own data:
 - test_cutx
 - test_signal_zlens
 
+**Please open test_signal_zlens.m to modify the path to save figures!**
 
 
 # Tips
